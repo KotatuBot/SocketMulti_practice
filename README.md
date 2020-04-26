@@ -1,4 +1,4 @@
-# SocketMulti_practice
+# ソケットプログラミングでの並列
 ## ServerSocketでの複数クライアント
 
 1. 複数クライアントをsocketで実装するにはスレッド間通信を行う必要がある．=> threadingライブラリを利用する．
