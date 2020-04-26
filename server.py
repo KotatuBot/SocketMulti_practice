@@ -7,6 +7,7 @@ host = "127.0.0.1"
 port = 6000
 client = []
 
+# スレッドのサーバー処理
 def handler(clientsock,address):
     while True:
         try:
@@ -22,12 +23,15 @@ def handler(clientsock,address):
             # Write => Client
             clientsock.send(s_msg)
             print ("send message")
+        # クライアント側が接続を切ったときの処理
         except ConnectionResetError:
+            # ソケットを閉じる
             clientsock.close()
-            # Remove Client Socket
+            # ソケットとアドレスを削除する
             client.remove((clientsock,address))
 
 def server_start():
+    # サーバ側の処理を起動する．
     serversock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     serversock.bind((host,port))
     serversock.listen(10)
@@ -36,9 +40,9 @@ def server_start():
         clientcon, address = serversock.accept()
         # Client Append
         client.append((clientcon,address))
-        # Client Socket Tread Client
+        # スレッドを作成する．クライアントのソケットとクライアント側のアドレスをわたす．
         thread_handler = threading.Thread(target=handler,args=(clientcon,address),daemon=True)
-
+        # スレッドをスタートする．
         thread_handler.start()
 
 if __name__ == "__main__":
